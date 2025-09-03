@@ -1,0 +1,87 @@
+.search-bar {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  backdrop-filter: blur(8px);
+  background-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  height: auto; // ajusté pour le dropdown
+  padding: 8px 12px;
+  border-radius: 10px;
+  width: 270px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  h1 {
+    width: 168px;
+    height: 17px;
+    font-size: 14px;
+    font-weight: lighter;
+  }
+
+  .search-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    input {
+      flex: 1; // remplace width fixe pour s’adapter
+      height: 26px;
+      border: 1px solid #7d7d7d;
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-size: 14px;
+
+      &:focus {
+        outline: none;
+        border-color: #f0c900;
+      }
+    }
+
+    .search-button {
+      width: 26px;
+      height: 26px;
+      border: none;
+      border-radius: 6px;
+      padding: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f0c900;
+
+      img {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+
+  // Dropdown des résultats
+  .search-results {
+    max-height: 200px; // limite la hauteur
+    overflow-y: auto; // scroll si beaucoup de résultats
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+
+    li {
+      padding: 6px 10px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+
+      &:hover {
+        background-color: #f0c900;
+        color: #000;
+      }
+    }
+  }
+}

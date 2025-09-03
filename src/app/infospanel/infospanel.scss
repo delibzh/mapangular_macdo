@@ -1,0 +1,115 @@
+:host {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  min-height: 120px;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.57);
+  z-index: 1001;
+  border-radius: 16px;
+  display: block;
+}
+
+.infos-panel {
+  padding: 20px;
+  height: 100%;
+}
+
+.restaurant-selected {
+  max-width: 600px;
+  margin: 0 auto;
+
+  h3 {
+    margin: 0 0 15px 0;
+    font-size: 18px;
+    color: #333;
+    text-align: center;
+  }
+}
+
+.restaurant-info {
+  margin-bottom: 20px;
+
+  h4 {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  p {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+
+  button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  .btn-continuer {
+    background-color: #ffc107;
+    color: black;
+
+    &:hover {
+      background-color: #e0a800;
+    }
+  }
+
+  .btn-annuler {
+    background-color: #6c757d;
+    color: white;
+
+    &:hover {
+      background-color: #545b62;
+    }
+  }
+}
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+
+  p {
+    color: #666;
+    font-style: italic;
+    margin: 0;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .infos-panel {
+    padding: 15px;
+  }
+
+  .button-group {
+    flex-direction: column;
+
+    button {
+      width: 100%;
+    }
+  }
+}

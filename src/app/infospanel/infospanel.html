@@ -1,0 +1,19 @@
+<div class="infos-panel">
+  @if (selectedRestaurant()) {
+  <div class="restaurant-selected">
+    <h3>Restaurant sélectionné</h3>
+    <div class="restaurant-info">
+      <h4>{{ getRestaurantName() }}</h4>
+      <p>{{ getRestaurantAddress() }}</p>
+    </div>
+    <div class="button-group">
+      <button class="btn-continuer" (click)="continuer()">Continuer</button>
+      <button class="btn-annuler" (click)="annuler()">Annuler</button>
+    </div>
+  </div>
+  } @else {
+  <div class="empty-state">
+    <p>Sélectionnez un restaurant sur la carte</p>
+  </div>
+  }
+</div>

@@ -1,0 +1,33 @@
+<div class="search-bar">
+  <h1>Recherche un restaurant</h1>
+
+  <div class="search-row">
+    <!-- Input lié  à signal city -->
+    <input
+      type="text"
+      [ngModel]="city()"
+      (ngModelChange)="city.set($event); onSearch()"
+      placeholder="Tapez une ville..."
+    />
+
+    <!-- Bouton loupe -->
+    <button
+      class="search-button"
+      (click)="searchByButton()"
+      aria-label="Rechercher"
+    >
+      <img src="assets/search-icon.svg" alt="Loupe" />
+    </button>
+  </div>
+
+  <!-- Menu déroulant moderne Angular 20+ (@if, @for, marche ici mais pas dans infospanel ? ) -->
+  @if (results().length > 0) {
+  <ul class="search-results">
+    @for (cityResult of results(); track trackBy(cityResult)) {
+    <li (click)="selectCity(cityResult)">
+      {{ cityResult.display_name }}
+    </li>
+    }
+  </ul>
+  }
+</div>
