@@ -18,8 +18,8 @@
 ### Cloner le dépôt
 
 ```bash
-git clone <URL-DU-REPO>
-cd <NOM-DU-PROJET>
+git clone <https://github.com/delibzh/mapangular_macdo>
+cd <mapangular_macdo>
 ```
 
 ### Installer les dépendances
