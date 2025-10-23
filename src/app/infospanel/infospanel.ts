@@ -1,9 +1,10 @@
-import { NgIf } from '@angular/common';
-// infospanel.ts
 import { Component } from '@angular/core';
+
+import { Store } from '@ngrx/store';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { AppStateService } from '../services/app-states.service';
 import { NominatimResult } from '../services/nominatim';
+import { selectSelectedRestaurant } from '../state/app.selectors';
+import * as AppActions from '../state/app.actions';
 
 @Component({
   selector: 'app-infospanel',
@@ -12,12 +13,12 @@ import { NominatimResult } from '../services/nominatim';
   styleUrls: ['./infospanel.scss'],
 })
 export class Infospanel {
-  //  pont Observable -> Signal
-  selectedRestaurant: ReturnType<typeof toSignal<NominatimResult | null>>;
+  selectedRestaurant!: ReturnType<typeof toSignal<NominatimResult | null>>;
 
-  constructor(private appState: AppStateService) {
-    this.selectedRestaurant = toSignal<NominatimResult | null>(
-      this.appState.selectedRestaurant$,
+  constructor(private store: Store) {
+    //  init après injection du store
+    this.selectedRestaurant = toSignal(
+      this.store.select(selectSelectedRestaurant),
       { initialValue: null }
     );
   }
@@ -35,11 +36,10 @@ export class Infospanel {
   }
 
   continuer() {
-    // naviguation si besoin
+    //  navigation / étape suivante (vide pour le projet)
   }
 
   annuler() {
-    // reset la sélection dans l’état centralisé
-    this.appState.selectRestaurant(null as any); // ou adapte la signature à null
+    this.store.dispatch(AppActions.clearSelectedRestaurant());
   }
 }

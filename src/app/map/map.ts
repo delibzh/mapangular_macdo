@@ -1,9 +1,20 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  Injector,
+  effect,
+  inject,
+} from '@angular/core';
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
 import * as L from 'leaflet';
 import { NominatimResult } from '../services/nominatim';
 import { MapUtilsService } from '../services/map-utils.service';
-import { AppStateService } from '../services/app-states.service';
+
+import { Store } from '@ngrx/store';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { selectRestaurants } from '../state/app.selectors';
+import * as AppActions from '../state/app.actions';
 
 @Component({
   selector: 'app-map',
@@ -26,17 +37,41 @@ export class Map implements OnInit {
       }),
     ],
     zoom: 13,
-    center: L.latLng(48.8566, 2.3522), // Paris par défaut
+    center: L.latLng(48.8566, 2.3522),
   };
 
-  constructor(
-    private mapUtils: MapUtilsService,
-    private appState: AppStateService
-  ) {}
+  restaurants!: ReturnType<typeof toSignal<NominatimResult[]>>;
+  private injector = inject(Injector);
 
-  ngOnInit(): void {
-    this.addMarker(48.8566, 2.3522, 'Bienvenue à Paris !');
+  constructor(private mapUtils: MapUtilsService, private store: Store) {
+    this.restaurants = toSignal(this.store.select(selectRestaurants), {
+      initialValue: [],
+    });
+
+    effect(
+      () => {
+        const list = this.restaurants();
+        if (!this.map) return;
+
+        this.markers.forEach((m) => m.remove());
+        this.markers = [];
+
+        for (const r of list) {
+          const popup = this.mapUtils.createPopupContent(
+            r.display_name,
+            r,
+            (x) => this.onRestaurantSelected(x)
+          );
+          const marker = this.mapUtils.createMarker(+r.lat, +r.lon, popup);
+          marker.addTo(this.map);
+          this.markers.push(marker);
+        }
+      },
+      { injector: this.injector }
+    );
   }
+
+  ngOnInit(): void {}
 
   onMapReady(mapInstance: L.Map) {
     this.map = mapInstance;
@@ -44,55 +79,18 @@ export class Map implements OnInit {
   }
 
   setFocus(city: NominatimResult) {
-    const lat = +city.lat;
-    const lon = +city.lon;
-    this.map.setView([lat, lon], 15);
-    this.addMarker(lat, lon, city.display_name);
+    this.map.setView([+city.lat, +city.lon], 13);
   }
 
-  updateFocus(city: NominatimResult & { mcds?: NominatimResult[] }) {
+  // Appelé par AppComponent après sélection de ville pour recadrer la carte
+  updateFocus(city: NominatimResult) {
     if (!this.map) return;
-
-    // Supprimer anciens marqueurs
-    this.markers.forEach((m) => m.remove());
-    this.markers = [];
-
-    const lat = +city.lat;
-    const lon = +city.lon;
-    this.map.setView([lat, lon], 13);
-
-    this.appState.setRestaurants(city.mcds ?? []); // synchro service ( BehaviorSubject)
-
-    city.mcds?.forEach((mcd) => {
-      this.addMarkerWithButton(+mcd.lat, +mcd.lon, mcd.display_name, mcd);
-    });
-  }
-
-  // Marqueur simple
-  addMarker(lat: number, lng: number, popupText: string) {
-    const marker = this.mapUtils.createMarker(lat, lng, popupText);
-    marker.addTo(this.map);
-    this.markers.push(marker);
-  }
-
-  // Marqueur avec bouton "Choisir"
-  addMarkerWithButton(
-    lat: number,
-    lng: number,
-    popupText: string,
-    restaurant: NominatimResult
-  ) {
-    const popup = this.mapUtils.createPopupContent(popupText, restaurant, (r) =>
-      this.onRestaurantSelected(r)
-    );
-    const marker = this.mapUtils.createMarker(lat, lng, popup);
-    marker.addTo(this.map);
-    this.markers.push(marker);
+    this.setFocus(city);
+    // Les marqueurs sont gérer automatiquement par l’effet quand le Store est mis à jour
   }
 
   private onRestaurantSelected(restaurant: NominatimResult): void {
-    // au lieu de dispatch CustomEvent => on met à jour l'état centralisé
-    this.appState.selectRestaurant(restaurant);
+    this.store.dispatch(AppActions.selectRestaurant({ restaurant }));
     this.map.closePopup();
   }
 }

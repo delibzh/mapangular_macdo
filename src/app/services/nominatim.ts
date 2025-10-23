@@ -71,7 +71,7 @@ export class Nominatim {
   clearCache() {
     this.cityCache.clear();
     this.mcdonaldsCache.clear();
-    console.log('🗑️ Cache vidé');
+    console.log('Cache vidé');
   }
 
   // Infos sur le cache
