@@ -1,0 +1,7 @@
+{
+  "hosting": {
+    "public": "dist/mac_donald/browser",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [{ "source": "**", "destination": "/index.html" }]
+  }
+}

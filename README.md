@@ -1,59 +1,90 @@
-# MacDonald
+# McDonald Map – Application Angular
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.1.5.
+## Prérequis
 
-## Development server
+| Package                    | Version | Rôle                           |
+| -------------------------- | ------- | ------------------------------ |
+| `@angular/core` et modules | 20.1.0  | Framework Angular              |
+| `@ngrx/store` / `effects`  | 20.0.1  | Gestion d’état réactive        |
+| `@bluehalo/ngx-leaflet`    | 20.0.0  | Composant Leaflet pour Angular |
+| `leaflet`                  | 1.9.4   | Carte interactive              |
+| `rxjs`                     | 7.8.x   | Programmation réactive         |
+| `zone.js`                  | 0.15.x  | Cycle de détection Angular     |
 
-To start a local development server, run:
+---
+
+## Récupération du projet
+
+### Cloner le dépôt
+
+```bash
+git clone <URL-DU-REPO>
+cd <NOM-DU-PROJET>
+```
+
+### Installer les dépendances
+
+```bash
+npm install
+```
+
+---
+
+## Lancer l’application en local
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Ouvrir un navigateur et se rendre sur :
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+```
+http://localhost:4200
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
-```bash
-ng generate --help
-```
+## Fonctionnalités principales
 
-## Building
+### Recherche de restaurants McDonald’s
 
-To build the project run:
+- Le composant `SearchBar` permet à l’utilisateur de saisir une ville.
+- Appel à l’API **Nominatim** pour récupérer les suggestions.
+- La sélection d’une ville met à jour le **Store NgRx**.
 
-```bash
-ng build
-```
+### Carte interactive
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+- Composant `Map` utilisant **ngx-leaflet**.
+- Affiche les marqueurs des restaurants provenant du Store.
+- Les popups des marqueurs incluent un bouton “Choisir” → sélection du restaurant et mise à jour du composant `Infospanel`.
 
-## Running unit tests
+### Infospanel
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+- Affiche les informations du restaurant sélectionné.
+- Les boutons “Continuer” / “Annuler” déclenchent des actions dans le Store.
 
-```bash
-ng test
-```
+### Gestion d’état
 
-## Running end-to-end tests
+- **NgRx** : cycle complet Actions → Effects → Reducer → Selectors → Composants.
+- Utilisation des API réactives modernes d’Angular (`signal()` / `toSignal()`).
+- Gestion des états de chargement et des erreurs pour assurer un comportement fiable.
 
-For end-to-end (e2e) testing, run:
+---
 
-```bash
-ng e2e
-```
+## Points techniques clés
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+| Fonctionnalité  | Description                                                           |
+| --------------- | --------------------------------------------------------------------- |
+| Angular moderne | Composants standalone, `signal()` / `toSignal()`, architecture claire |
+| NgRx maîtrisé   | Cycle complet, gestion asynchrone et gestion des erreurs              |
+| API externe     | Nominatim pour la géolocalisation, Leaflet pour la carte              |
+| Débogage        | Redux DevTools et console Angular pour inspecter l’état du Store      |
+| Extensibilité   | Possibilité d’ajouter facilement des fonctionnalités ou un backend    |
 
-## Additional Resources
+---
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Déploiement
+
+L’application est accessible en ligne :
+
+[https://test-2c7a9.web.app](https://test-2c7a9.web.app)
